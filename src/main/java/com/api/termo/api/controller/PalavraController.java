@@ -5,7 +5,8 @@ import java.util.HashMap;
 import java.util.Map;
 import javax.ws.rs.QueryParam;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -14,6 +15,7 @@ enum LetterStatus {
 }
 
 @RestController
+@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("/api/palavra")
 public class PalavraController {
     private final PalavraService palavraService;
@@ -23,7 +25,7 @@ public class PalavraController {
         this.palavraService = palavraService;
     }
 
-    @PostMapping("/verificar")
+    @GetMapping("/verificar")
     public Map<String, String> verificarPalavra(@QueryParam("palavraDigitada") String palavraDigitada) {
         Map<String, String> response = new HashMap<>();
         char[] palavraDigitadaArray = palavraDigitada.toCharArray();
