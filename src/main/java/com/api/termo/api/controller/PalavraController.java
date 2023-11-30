@@ -28,20 +28,39 @@ public class PalavraController {
     @GetMapping("/verificar")
     public Map<String, String> verificarPalavra(@QueryParam("palavraDigitada") String palavraDigitada) {
         Map<String, String> response = new HashMap<>();
-        char[] palavraDigitadaArray = palavraDigitada.toCharArray();
-        String palavraAtual = palavraService.getPalavraAtual();
-        int comprimentoMaximo = Math.max(palavraAtual.length(), palavraDigitadaArray.length);
+        String palavraAtual = palavraService.getPalavraAtual().toLowerCase();
 
-        for (int i = 0; i < comprimentoMaximo; i++) {
-            char letraAtual = (i < palavraDigitadaArray.length) ? palavraDigitadaArray[i] : ' ';
-            char letraPalavraAtual = (i < palavraAtual.length()) ? palavraAtual.charAt(i) : ' ';
+        palavraAtual = palavraAtual.replaceAll("[áàãâä]", "a");
+        palavraAtual = palavraAtual.replaceAll("[éèêë]", "e");
+        palavraAtual = palavraAtual.replaceAll("[íìîï]", "i");
+        palavraAtual = palavraAtual.replaceAll("[óòõôö]", "o");
+        palavraAtual = palavraAtual.replaceAll("[úùûü]", "u");
 
-            if (letraAtual == letraPalavraAtual) {
-                response.put(String.valueOf(letraAtual), LetterStatus.CORRECT.toString());
-            } else if (palavraAtual.indexOf(letraAtual) != -1) {
-                response.put(String.valueOf(letraAtual), LetterStatus.INCORRECT.toString());
+        char[] palavraDigitadaArray = palavraDigitada.toLowerCase().toCharArray();
+        boolean[] marcadoComoPresente = new boolean[palavraAtual.length()];
+
+        // Primeiro, marcar as letras corretas
+        for (int i = 0; i < palavraDigitadaArray.length; i++) {
+            char letra = palavraDigitadaArray[i];
+            if (i < palavraAtual.length() && letra == palavraAtual.charAt(i)) {
+                response.put(String.valueOf(i), LetterStatus.CORRECT.toString());
+                marcadoComoPresente[i] = true;
             } else {
-                response.put(String.valueOf(letraAtual), LetterStatus.MISSING.toString());
+                response.put(String.valueOf(i), LetterStatus.MISSING.toString());
+            }
+        }
+
+        // Depois, marcar as letras presentes
+        for (int i = 0; i < palavraDigitadaArray.length; i++) {
+            if (!response.get(String.valueOf(i)).equals(LetterStatus.CORRECT.toString())) {
+                char letra = palavraDigitadaArray[i];
+                for (int j = 0; j < palavraAtual.length(); j++) {
+                    if (letra == palavraAtual.charAt(j) && !marcadoComoPresente[j]) {
+                        response.put(String.valueOf(i), LetterStatus.INCORRECT.toString());
+                        marcadoComoPresente[j] = true;
+                        break;
+                    }
+                }
             }
         }
 
@@ -50,6 +69,6 @@ public class PalavraController {
 
     @RequestMapping("/atual")
     public String obterPalavraAtual() {
-        return "Palavra atual: " + palavraService.getPalavraAtual();
+        return palavraService.getPalavraAtual();
     }
 }
