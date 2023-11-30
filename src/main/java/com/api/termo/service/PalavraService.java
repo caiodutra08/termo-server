@@ -31,7 +31,7 @@ public class PalavraService {
     // Escolher uma palavra aleatória da lista
     private void escolherPalavraAleatoria() {
         Random random = new Random();
-        // pegar palavra com 5 letras
+
         palavraAtual = palavras.get(random.nextInt(palavras.size())).toLowerCase();
         while (palavraAtual.length() != 5) {
             palavraAtual = palavras.get(random.nextInt(palavras.size())).toLowerCase();
