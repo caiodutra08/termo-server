@@ -10,7 +10,7 @@
 
 ## 📕 Sobre/About
 
-o jogo de palavras "Termo" é um desafio onde os jogadores tentam adivinhar uma palavra oculta por meio de tentativas limitadas, recebendo dicas para guiá-los na escolha das letras corretas.
+O jogo de palavras "Termo" é um desafio onde os jogadores tentam adivinhar uma palavra oculta por meio de tentativas limitadas, recebendo dicas para guiá-los na escolha das letras corretas.
 
 **Funcionamento Básico do Jogo:**
 
